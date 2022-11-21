@@ -44,6 +44,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FragMap extends Fragment
@@ -140,15 +141,15 @@ public class FragMap extends Fragment
             double lng_m = lng[array_length-1];
             LatLng position = new LatLng(lat_m, lng_m);
 
-            //지도에 polylines 추가
-            Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
-                    .clickable(true)
-                    .add(
-                            new LatLng(lat[0], lng[0]),
-                            new LatLng(lat[1], lng[1]),
-                            new LatLng(lat[2], lng[2]),
-                            new LatLng(lat[3], lng[3]),
-                            new LatLng(lat[4], lng[4])));
+        //지도에 polyline 추가
+        List<LatLng> latLngList = new ArrayList<>();
+        for (int i = 0; i <array_length; i++) {
+            latLngList.add(i, new LatLng(lat[i], lng[i]));
+        }
+        Polyline polyline = googleMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .addAll(latLngList)
+                .width(4).color(Color.BLACK).geodesic(true));
 
 
             //마커 설정
@@ -164,7 +165,7 @@ public class FragMap extends Fragment
             // Set listeners for click events.
             googleMap.setOnPolylineClickListener(this);
             googleMap.setOnPolygonClickListener(this);
-            polyline1.setTag("A");
+            polyline.setTag("A");
     }
 
     @Override
